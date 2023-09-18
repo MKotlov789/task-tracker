@@ -1,19 +1,18 @@
 # Task Tracker
 
-Task Tracker is a comprehensive application that manages tasks and sends notifications to users. This repository serves as the central hub for the Task Tracker project, orchestrating the core components.
+
+Task Tracker is an application where гsers can create, edit, and delete tasks. It enables user registration, authentication and implements user data validation. Additionally, it provides daily notifications summarizing completed and pending tasks and sends email notifications upon registration. The project comprises three microservices, each with distinct functionality.
+
 
 ## Overview
 
 The Task Tracker system consists of the following microservices:
 
-The Task Tracker application provides a complete solution for task management and notifications. It consists of the following key components:
+- **[Task Tracker Backend](https://github.com/MKotlov789/task-tracker-backend):** This service provides provides RESTful API endpoints for task management, user registration, login, and more. It also handles authentication using JWT tokens and integrates with [Task Tracker Email Sender](https://github.com/MKotlov789/task-tracker-email-sender) using Apache Kafka for sending welcoming emails to newly registered users. Additionally, it implements custom validation for email, username, and password.
 
-- **[Task Tracker Backend](https://github.com/MKotlov789/task-tracker-backend):** This service provides provides RESTful API endpoints for tasks, user registration, login, and more. It also handles authentication using JWT tokens and integrates with Kafka for sending welcoming emails to newly registered users. Additionally, it implements custom validation for email, username, and password.
+- **[Task Tracker Email Scheduler](https://github.com/MKotlov789/task-tracker-email-scheduler):** Task Tracker Email Scheduler is responsible for scheduling and dispatching daily task notifications to users. It collaborates with [Task Tracker Email Sender](https://github.com/MKotlov789/task-tracker-email-sender) to deliver these notifications.
 
-- **[Task Tracker Email Scheduler](https://github.com/MKotlov789/task-tracker-email-scheduler):** Task Tracker Email Scheduler is responsible for scheduling and dispatching daily task notifications to users. It collaborates seamlessly with [Task Tracker Email Sender](https://github.com/MKotlov789/task-tracker-email-sender) to deliver these notifications effectively. It utilizes Java, Spring Framework, Apache Kafka, and Spring Scheduler.
-
-- **[Task Tracker Email Sender](https://github.com/MKotlov789/task-tracker-email-sender):** Task Tracker Email Sender is tasked with sending email notifications based on incoming Kafka messages. It receives welcoming emails from [Task Tracker Backend](https://github.com/MKotlov789/task-tracker-backend) and scheduled notification messages from Task Tracker Email Scheduler. It relies on Java, Spring Framework, Apache Kafka, and Spring Mail.
-
+- **[Task Tracker Email Sender](https://github.com/MKotlov789/task-tracker-email-sender):** Task Tracker Email Sender is tasked with sending email notifications based on incoming Kafka messages. It receives welcoming emails from [Task Tracker Backend](https://github.com/MKotlov789/task-tracker-backend) and scheduled notification messages from [Task Tracker Email Scheduler](https://github.com/MKotlov789/task-tracker-email-scheduler). 
 
 ## Technologies Used
 ### Common Technologies for All Services
