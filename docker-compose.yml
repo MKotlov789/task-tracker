@@ -1,0 +1,86 @@
+networks:
+  task-tracker-network:
+    driver: bridge
+
+services:
+  task-tracker-backend:
+    image: mikhailksssss/task-tracker-backend:latest
+    ports:
+      - 8081:8081
+    container_name: task-tracker-backend
+    networks:
+      - task-tracker-network
+    depends_on:
+      - db
+      - zookeeper
+      - kafka
+
+  task-tracker-email-scheduler:
+    image: mikhailksssss/task-tracker-email-scheduler:latest
+    container_name: task-tracker-email-scheduler
+    networks:
+      - task-tracker-network
+    depends_on:
+      - db
+      - zookeeper
+      - kafka
+
+  task-tracker-email-sender:
+    image: mikhailksssss/task-tracker-email-sender:latest
+    ports:
+      - 587:587
+    container_name: task-tracker-email-sender
+    depends_on:
+      - zookeeper
+      - kafka
+      - task-tracker-backend
+    env_file:
+      - secret.env
+    networks:
+      - task-tracker-network
+
+  db:
+    image: mysql:latest
+    ports:
+      - 3307:3306
+    restart: always
+    volumes:
+      - ./tmp/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: task_manager_db
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    container_name: task_manager_db
+    networks:
+      - task-tracker-network
+
+  zookeeper:
+    image: 'confluentinc/cp-zookeeper:latest'
+    container_name: zookeeper
+    ports:
+      - '2181:2181'
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - task-tracker-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - '29092:29092'
+#    volumes:
+#      - './tmp/kafka:/kafka'
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: OUTSIDE://:29092,INTERNAL://:9092
+      KAFKA_ADVERTISED_LISTENERS: OUTSIDE://localhost:29092,INTERNAL://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    networks:
+      - task-tracker-network
