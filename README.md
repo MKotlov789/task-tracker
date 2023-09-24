@@ -1,7 +1,7 @@
 # Task Tracker
 
 
-Task Tracker is an application where гsers can create, edit, and delete tasks. It enables user registration, authentication and implements user data validation. Additionally, it provides daily notifications summarizing completed and pending tasks and sends email notifications upon registration. The project comprises three microservices, each with distinct functionality.
+Task Tracker is an application where users can create, edit, and delete tasks. It enables user registration, authentication and implements user data validation. Additionally, it provides daily notifications summarizing completed and pending tasks and sends email notifications upon registration. The project comprises three microservices, each with distinct functionality.
 
 
 ## Overview
